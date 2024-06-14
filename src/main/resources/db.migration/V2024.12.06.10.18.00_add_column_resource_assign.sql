@@ -1,6 +1,9 @@
 CREATE TABLE public.resource_assign
 (
     resource_assign_id serial NOT NULL,
+    user_id int4range NOT NULL,
+    role_id int4range NOT NULL,
+    resource_id int4range NOT NULL,
     resource_assign_type character varying(45) NOT NULL,
     created_date timestamp with time zone,
     created_by character varying,

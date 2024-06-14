@@ -1,7 +1,7 @@
 package com.cmc.demo.oauth.controller;
 
-import com.cmc.demo.oauth.security.dto.AuthenticationRequest;
-import com.cmc.demo.oauth.security.dto.AuthenticationResponse;
+import com.cmc.demo.oauth.security.dto.request.AuthenticationRequest;
+import com.cmc.demo.oauth.security.dto.response.AuthenticationResponse;
 import com.cmc.demo.oauth.security.utils.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

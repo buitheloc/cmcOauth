@@ -1,6 +1,8 @@
 CREATE TABLE public.role_permissions
 (
     role_permissions_id serial NOT NULL,
+    permission_id int4range NOT NULL,
+    role_id int4range NOT NULL,
     created_date timestamp with time zone,
     created_by character varying,
     last_modified_by character varying,

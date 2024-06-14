@@ -1,4 +1,4 @@
-package com.cmc.demo.oauth.security.dto;
+package com.cmc.demo.oauth.security.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

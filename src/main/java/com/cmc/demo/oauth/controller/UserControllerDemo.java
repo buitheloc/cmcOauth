@@ -1,6 +1,6 @@
 package com.cmc.demo.oauth.controller;
 
-import com.cmc.demo.oauth.security.entity.Users;
+import com.cmc.demo.oauth.model.entity.Users;
 import com.cmc.demo.oauth.security.repo.UserRepository;
 import com.cmc.demo.oauth.util.BaseResponse;
 import com.cmc.demo.oauth.util.ResponseFactory;

@@ -1,6 +1,8 @@
 CREATE TABLE public.user_roles
 (
     user_roles_id serial NOT NULL,
+    role_id int4range NOT NULL,
+    user_id int4range NOT NULL,
     created_date timestamp with time zone,
     created_by character varying,
     last_modified_by character varying,
