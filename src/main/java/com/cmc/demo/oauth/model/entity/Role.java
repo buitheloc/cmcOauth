@@ -36,18 +36,18 @@ public class Role extends Audit<String> {
     @EqualsAndHashCode.Exclude
     private Set<RolePermissions> rolePermissionsSet;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Users> usersSet;
 
-    @OneToMany( mappedBy = "role",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<ResourceAssign> resourceAssignSet;
+//    @OneToMany( mappedBy = "role",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    @ToString.Exclude
+//    @EqualsAndHashCode.Exclude
+//    private Set<ResourceAssign> resourceAssignSet;
 }
