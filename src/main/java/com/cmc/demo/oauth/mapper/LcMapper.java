@@ -1,4 +1,4 @@
-package com.cmc.demo.oauth.security.mapper;
+package com.cmc.demo.oauth.mapper;
 
 import java.util.List;
 

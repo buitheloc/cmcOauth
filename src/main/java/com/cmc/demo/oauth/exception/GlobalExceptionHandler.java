@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception ex) {
-        return ResponseFactory.error(ResponseCode.BAD_REQUEST.getValue(), ex.getMessage(), (Object)null);
+        return ResponseFactory.error(ResponseCode.BAD_REQUEST.getValue(), "Please contact Admin", (Object)null);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

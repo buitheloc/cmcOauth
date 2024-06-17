@@ -26,13 +26,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-
     // Get the JWT token from the Authorization header
     String token = jwtTokenProvider.resolveToken(request);
 
     // Check if the token is valid
     if (token != null && jwtTokenProvider.validateToken(token)) {
-
       // Get the user details from the token
       UserDetails userDetails = userDetailsService.loadUserByUsername(jwtTokenProvider.getUsername(token));
       // Create an authentication object and set it in the security context

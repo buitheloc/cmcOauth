@@ -1,4 +1,4 @@
-package com.cmc.demo.oauth.security.mapper;
+package com.cmc.demo.oauth.mapper;
 
 import com.cmc.demo.oauth.model.entity.Users;
 import com.cmc.demo.oauth.security.dto.response.UserResponse;

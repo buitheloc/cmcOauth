@@ -27,21 +27,24 @@ public class Users extends Audit<String>{
     @Column(name = "password")
     private String password;
     @Column(name = "is_active")
-    private String isActive;
+    private boolean isActive;
     @Column(name = "description")
     private String description;
     @Column(name = "remember_token")
     private String rememberToken;
 
-    @OneToMany( mappedBy = "users",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<ResourceAssign> resourceAssignSet;
 
-    @OneToMany( mappedBy = "users",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<UserRoles> userRolesSet;
+    private Set<Role> roleSet;
 }

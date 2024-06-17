@@ -4,7 +4,7 @@ CREATE TABLE public.users
     user_name character varying(45) NOT NULL,
     email character varying(45),
     password character varying(45),
-    is_active integer,
+    is_active boolean,
     description character varying(45),
     remember_token character varying(255) NOT NULL,
     created_date timestamp with time zone,
