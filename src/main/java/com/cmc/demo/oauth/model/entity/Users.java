@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -15,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @JsonIgnoreProperties(value = {"handler", "hibernateLazyInitializer", "FieldHandler"})
-public class Users extends Audit<String>{
+public class Users extends Audit<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -33,11 +35,17 @@ public class Users extends Audit<String>{
     @Column(name = "remember_token")
     private String rememberToken;
 
-//    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    @ToString.Exclude
-//    @EqualsAndHashCode.Exclude
-//    private Set<ResourceAssign> resourceAssignSet;
+    @Column(name="refresh_token")
+    private String refreshToken;
+
+    @Column(name="refresh_token_expiry_date")
+    private Instant refreshTokenExpiryDate;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<ResourceAssign> resourceAssignSet;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",

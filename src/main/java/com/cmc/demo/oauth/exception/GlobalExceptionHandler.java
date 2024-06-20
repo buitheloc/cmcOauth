@@ -5,12 +5,15 @@ import com.cmc.demo.oauth.util.ResponseFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +24,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception ex) {
-        return ResponseFactory.error(ResponseCode.BAD_REQUEST.getValue(), "Please contact Admin", (Object)null);
+        return ResponseFactory.error(ResponseCode.BAD_REQUEST.getValue(), "Please contact Admin", null);
+    }
+
+    @ExceptionHandler(value = TokenRefreshException.class)
+    public ResponseEntity<?> handleTokenRefreshException(TokenRefreshException ex) {
+        return ResponseFactory.error(ResponseCode.INVALID_REFRESH_TOKEN.getValue(),"Refresh token was expired.",null);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -29,43 +37,38 @@ public class GlobalExceptionHandler {
         String msg = null;
         Throwable cause = ex.getCause();
 
-        if (cause instanceof JsonParseException) {
-            JsonParseException jpe = (JsonParseException) cause;
+        if (cause instanceof JsonParseException jpe) {
             msg = jpe.getOriginalMessage();
         }
 
         // special case of JsonMappingException below, too much class detail in error messages
-        else if (cause instanceof MismatchedInputException) {
-            MismatchedInputException mie = (MismatchedInputException) cause;
+        else if (cause instanceof MismatchedInputException mie) {
             if (mie.getPath() != null && mie.getPath().size() > 0) {
-                msg = mie.getPath().get(0).getFieldName()+".invalid";
+                msg = mie.getPath().get(0).getFieldName() + ".invalid";
             }
             // just in case, haven't seen this condition
             else {
                 msg = "Invalid request message";
             }
-        }
-
-        else if (cause instanceof JsonMappingException) {
-            JsonMappingException jme = (JsonMappingException) cause;
+        } else if (cause instanceof JsonMappingException jme) {
             msg = jme.getOriginalMessage();
             if (jme.getPath() != null && jme.getPath().size() > 0) {
                 msg = "Invalid request field: " + jme.getPath().get(0).getFieldName() + ": " + msg;
             }
         }
-        return ResponseFactory.error(ResponseCode.BAD_REQUEST.getValue(), msg, (Object)null);
+        return ResponseFactory.error(ResponseCode.BAD_REQUEST.getValue(), msg, null);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap();
         e.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError)error).getField();
+            String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
         String errorMessage = "Validation failed for argument";
-        Map.Entry<String,String> entry = errors.entrySet().iterator().next();
+        Map.Entry<String, String> entry = errors.entrySet().iterator().next();
         if (!Objects.isNull(entry)) {
             errorMessage = entry.getValue();
         }

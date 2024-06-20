@@ -1,12 +1,11 @@
 package com.cmc.demo.oauth.controller;
 
 import com.cmc.demo.oauth.security.dto.request.AuthenticationRequest;
+import com.cmc.demo.oauth.security.dto.request.RefreshTokenRequest;
+import com.cmc.demo.oauth.security.dto.response.RefreshTokenResponse;
 import com.cmc.demo.oauth.security.dto.response.AuthenticationResponse;
-import com.cmc.demo.oauth.security.utils.JwtTokenProvider;
+import com.cmc.demo.oauth.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,24 +14,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
+    final
+    AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(
+    public ResponseEntity<AuthenticationResponse> authenticateUser(
             @RequestBody AuthenticationRequest authenticationRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
-                        authenticationRequest.getPassword())
-        );
+        return ResponseEntity.ok(authService.authenticateUser(authenticationRequest));
+    }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtTokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<RefreshTokenResponse> refreshToken(
+            @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return ResponseEntity.ok(authService.refreshToken(refreshTokenRequest));
     }
 
     @GetMapping("/logout")

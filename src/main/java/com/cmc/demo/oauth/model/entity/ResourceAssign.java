@@ -22,6 +22,9 @@ public class ResourceAssign extends Audit<String> {
     @Column(name = "resource_assign_type")
     private String resourceAssignType;
 
+    @Column(name="resource_id")
+    private String resourceId;
+
     @JoinColumn(name = "role_id")
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore

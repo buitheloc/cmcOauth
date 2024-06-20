@@ -6,10 +6,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MyUserDetails implements UserDetails {
-    private Users users;
+    private final Users users;
 
     public MyUserDetails(Users users) {
         this.users = users;

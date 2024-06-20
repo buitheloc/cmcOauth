@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AuthenticationRequest {
-  private String username;
-  private String password;
+public class RefreshTokenRequest {
+    private String refreshToken;
+    private String userName;
 }

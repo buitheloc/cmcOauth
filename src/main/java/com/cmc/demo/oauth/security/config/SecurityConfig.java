@@ -10,7 +10,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -27,61 +26,61 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecurityConfig {
 
-  private final JwtTokenFilter jwtAuthenticationFilter;
-  private final UserDetailsService userDetailsService;
+    private final JwtTokenFilter jwtAuthenticationFilter;
+    private final UserDetailsService userDetailsService;
 
-  public SecurityConfig(JwtTokenFilter jwtAuthenticationFilter,
-      UserDetailsService userDetailsService) {
-    this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    this.userDetailsService = userDetailsService;
-  }
+    public SecurityConfig(JwtTokenFilter jwtAuthenticationFilter,
+                          UserDetailsService userDetailsService) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.userDetailsService = userDetailsService;
+    }
 
-  @Bean
-  public AuthenticationProvider authenticationProvider() {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setUserDetailsService(userDetailsService);
-    authProvider.setPasswordEncoder(passwordEncoder());
-    return authProvider;
-  }
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 
-  @Bean
-  PasswordEncoder passwordEncoder() {
-    return NoOpPasswordEncoder.getInstance();
-  }
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
 
-  @Bean
-  AuthenticationManager authenticationManager(
-      AuthenticationConfiguration authenticationConfiguration) throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
-  }
+    @Bean
+    AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-    httpSecurity.headers().frameOptions().disable();
+        httpSecurity.headers().frameOptions().disable();
 
-    httpSecurity.cors().and().csrf().disable();
-    //@formatter:off
-    httpSecurity
-          .authorizeHttpRequests()
-          .requestMatchers("/api/auth/**").permitAll()
-          .anyRequest().authenticated()
-        .and()
-          .sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-          .exceptionHandling()
-          .authenticationEntryPoint(
-              (request, response, authException)
-                -> response.sendError(
-                    HttpServletResponse.SC_UNAUTHORIZED,
-                    authException.getLocalizedMessage()
-                  )
-          )
-        .and()
-          .authenticationProvider(authenticationProvider())
-          .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-    //@formatter:on
-    return httpSecurity.build();
-  }
+        httpSecurity.cors().and().csrf().disable();
+        //@formatter:off
+        httpSecurity
+                .authorizeHttpRequests()
+                .requestMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(
+                        (request, response, authException)
+                                -> response.sendError(
+                                HttpServletResponse.SC_UNAUTHORIZED,
+                                authException.getLocalizedMessage()
+                        )
+                )
+                .and()
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        //@formatter:on
+        return httpSecurity.build();
+    }
 }

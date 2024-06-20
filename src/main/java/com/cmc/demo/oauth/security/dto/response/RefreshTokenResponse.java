@@ -5,17 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
-    private String userName;
+public class RefreshTokenResponse {
     private String accessToken;
-    private String tokenType;
-    private String refreshToken;
-    private List<String> permissionList;
-    private List<String> resourceList;
 }

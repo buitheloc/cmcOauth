@@ -27,7 +27,7 @@ public class Permissions extends Audit<String> {
     @Column(name = "description")
     private String description;
 
-    @OneToMany( mappedBy = "permissions",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "permissions", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

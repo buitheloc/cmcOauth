@@ -18,6 +18,8 @@ public final class ResponseFactory {
     }
 
     public static <I> ResponseEntity<BaseResponse<I>> success(HttpStatus status, I data) {
+
+
         BaseResponse response = BaseResponse.builder()
                 .code(status.value())
                 .success(true)

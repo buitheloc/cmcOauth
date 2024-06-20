@@ -2,7 +2,7 @@ package com.cmc.demo.oauth.security.service;
 
 import com.cmc.demo.oauth.model.entity.Users;
 import com.cmc.demo.oauth.security.entity.MyUserDetails;
-import com.cmc.demo.oauth.security.repo.UserRepository;
+import com.cmc.demo.oauth.repository.UserRepository;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

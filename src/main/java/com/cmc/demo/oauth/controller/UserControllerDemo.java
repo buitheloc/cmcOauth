@@ -2,7 +2,7 @@ package com.cmc.demo.oauth.controller;
 
 import com.cmc.demo.oauth.mapper.UserInfoMapper;
 import com.cmc.demo.oauth.security.dto.response.UserResponse;
-import com.cmc.demo.oauth.security.repo.UserRepository;
+import com.cmc.demo.oauth.repository.UserRepository;
 import com.cmc.demo.oauth.service.PermissionAccess;
 import com.cmc.demo.oauth.util.BaseResponse;
 import com.cmc.demo.oauth.util.ResponseFactory;
@@ -27,8 +27,14 @@ public class UserControllerDemo {
     }
 
     @GetMapping("/{id}")
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN1"})
+
     public ResponseEntity<BaseResponse<UserResponse>> getUserById(@PathVariable Long id) {
+
+        if (!PermissionAccess.havePermissionAccess("ADMIN")) {
+            return ResponseFactory.success(HttpStatus.OK, null, "Not Access");
+        }
+
         UserResponse res = userInfoMapper.toDomain(userRepository.getReferenceById(id));
 
         return ResponseFactory.success(HttpStatus.OK, res);
