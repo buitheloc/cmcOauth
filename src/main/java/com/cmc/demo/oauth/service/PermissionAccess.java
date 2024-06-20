@@ -9,7 +9,9 @@ public class PermissionAccess {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         for(Object obj : authentication.getAuthorities().toArray()){
-            if (obj.toString().equals(access)) return true;
+            if (obj.toString().equals(access)) {
+                return true;
+            }
         }
 
         return false;

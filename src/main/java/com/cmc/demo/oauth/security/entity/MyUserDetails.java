@@ -1,6 +1,5 @@
 package com.cmc.demo.oauth.security.entity;
 
-import com.cmc.demo.oauth.model.entity.Role;
 import com.cmc.demo.oauth.model.entity.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,22 +7,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class MyUserDetails implements UserDetails {
     private final Users users;
+    private final List<String> permissionList;
 
-    public MyUserDetails(Users users) {
+    public MyUserDetails(Users users, List<String> permissionList) {
+        this.permissionList = permissionList;
         this.users = users;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Role> roleSet = users.getRoleSet();
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 
-        for (Role role : roleSet) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
+        for (String permission : permissionList) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + permission));
         }
 
         return authorities;

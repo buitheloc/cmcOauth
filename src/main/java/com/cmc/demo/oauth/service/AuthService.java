@@ -7,6 +7,5 @@ import com.cmc.demo.oauth.security.dto.response.RefreshTokenResponse;
 
 public interface AuthService {
     AuthenticationResponse authenticateUser(AuthenticationRequest authenticationRequest);
-
     RefreshTokenResponse refreshToken(RefreshTokenRequest authenticationRequest);
 }

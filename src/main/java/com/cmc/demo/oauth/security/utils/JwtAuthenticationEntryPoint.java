@@ -10,19 +10,18 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+                         AuthenticationException authException) throws IOException {
 
-  @Override
-  public void commence(HttpServletRequest request, HttpServletResponse response,
-      AuthenticationException authException) throws IOException, IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{ \"message\": \"" + authException.getMessage() + "\" }");
+    }
 
-    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    response.setContentType("application/json");
-    response.getWriter().write("{ \"message\": \"" + authException.getMessage() + "\" }");
-  }
-
-  @Override
-  public void afterPropertiesSet() {
-    setRealmName("JWT Authentication");
-    super.afterPropertiesSet();
-  }
+    @Override
+    public void afterPropertiesSet() {
+        setRealmName("JWT Authentication");
+        super.afterPropertiesSet();
+    }
 }

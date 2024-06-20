@@ -11,5 +11,5 @@ import lombok.Setter;
 @Setter
 public class RefreshTokenRequest {
     private String refreshToken;
-    private String userName;
+    private String username;
 }

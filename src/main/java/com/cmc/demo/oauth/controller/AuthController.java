@@ -2,24 +2,19 @@ package com.cmc.demo.oauth.controller;
 
 import com.cmc.demo.oauth.security.dto.request.AuthenticationRequest;
 import com.cmc.demo.oauth.security.dto.request.RefreshTokenRequest;
-import com.cmc.demo.oauth.security.dto.response.RefreshTokenResponse;
 import com.cmc.demo.oauth.security.dto.response.AuthenticationResponse;
+import com.cmc.demo.oauth.security.dto.response.RefreshTokenResponse;
 import com.cmc.demo.oauth.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/api/auth")
 public class AuthController {
-
-    final
+    @Autowired
     AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticateUser(

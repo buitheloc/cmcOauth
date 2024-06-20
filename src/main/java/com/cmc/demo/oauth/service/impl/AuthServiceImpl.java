@@ -1,7 +1,6 @@
 package com.cmc.demo.oauth.service.impl;
 
 import com.cmc.demo.oauth.exception.TokenRefreshException;
-import com.cmc.demo.oauth.model.entity.Permissions;
 import com.cmc.demo.oauth.model.entity.ResourceAssign;
 import com.cmc.demo.oauth.model.entity.Users;
 import com.cmc.demo.oauth.repository.PermissionRepository;
@@ -22,8 +21,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -54,17 +53,12 @@ public class AuthServiceImpl implements AuthService {
         String jwt = jwtTokenProvider.createTokenByAuthentication(authentication);
 
         Users users = userRepository.findUsersByUserName(authentication.getName());
-
-        List<Permissions> permissionsList = permissionRepository.getPermissionsByRoleSet(users.getRoleSet());
         List<String> permisionList = new ArrayList<>();
-        for (Permissions permissions : permissionsList) {
-            permisionList.add(permissions.getPermissionName());
+        for (Object obj : authentication.getAuthorities()) {
+            permisionList.add(obj.toString());
         }
 
-        List<String> resourceList = new ArrayList<>();
-        for (ResourceAssign ra : users.getResourceAssignSet()) {
-            resourceList.add(ra.getResourceId());
-        }
+        List<String> resourceList = users.getResourceAssignSet().stream().map(ResourceAssign::getResourceId).collect(Collectors.toList());
 
         AuthenticationResponse response = new AuthenticationResponse();
         response.setUserName(authentication.getName());
@@ -72,14 +66,14 @@ public class AuthServiceImpl implements AuthService {
         response.setTokenType("Bearer");
         response.setPermissionList(permisionList);
         response.setResourceList(resourceList);
-        response.setRefreshToken(users.getRefreshToken() == null ? users.getRefreshToken() : getRefreshTokenNew(users));
+        response.setRefreshToken(users.getRefreshToken() == null ? getRefreshTokenNew(users) : users.getRefreshToken());
 
         return response;
     }
 
     @Override
     public RefreshTokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
-        Users users = userRepository.findUsersByUserName(refreshTokenRequest.getUserName());
+        Users users = userRepository.findUsersByUserName(refreshTokenRequest.getUsername());
         if (users.getRefreshTokenExpiryDate().compareTo(Instant.now()) < 0) {
             users.setRefreshToken(null);
             users.setRefreshTokenExpiryDate(null);
@@ -90,6 +84,7 @@ public class AuthServiceImpl implements AuthService {
         String jwtToken = jwtTokenProvider.createTokenByUserName(users.getUserName());
         RefreshTokenResponse response = new RefreshTokenResponse();
         response.setAccessToken(jwtToken);
+        response.setRefreshToken(refreshTokenRequest.getRefreshToken());
 
         return response;
     }

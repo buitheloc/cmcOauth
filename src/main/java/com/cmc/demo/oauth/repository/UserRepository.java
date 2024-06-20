@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<Users, Long> {
-  @Query("Select u From Users u Where u.userName = :userName  order by u.lastModifiedDate desc limit 1")
-  Users findUsersByUserName(@Param("userName") String userName);
+    @Query("Select u From Users u Where u.userName = :userName  order by u.lastModifiedDate desc limit 1")
+    Users findUsersByUserName(@Param("userName") String userName);
 }

@@ -17,8 +17,8 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtTokenProvider {
-  @Value("${jwtSecret}")
-  private String jwtSecret;
+  @Value("${jwtExpirationMs}")
+  private int jwtExpirationMs;
   Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
   public String createTokenByAuthentication(Authentication authentication) {
@@ -31,7 +31,7 @@ public class JwtTokenProvider {
     return Jwts.builder()
             .setSubject(userName)
             .setIssuedAt(new Date())
-            .setExpiration(new Date(new Date().getTime() + jwtSecret))
+            .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
             .signWith(SignatureAlgorithm.HS512, key)
             .compact();
   }
@@ -43,7 +43,6 @@ public class JwtTokenProvider {
     }
     return null;
   }
-
 
   public boolean validateToken(String token) {
     try {

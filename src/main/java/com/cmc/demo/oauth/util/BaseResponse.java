@@ -41,6 +41,7 @@ public class BaseResponse<T> {
                 .data(data)
                 .build();
     }
+
     public static <T> BaseResponse<T> success(ResponseCode responseCode, T data) {
         return BaseResponse.<T>builder()
                 .success(true)
@@ -49,6 +50,7 @@ public class BaseResponse<T> {
                 .data(data)
                 .build();
     }
+
     public static <T> BaseResponse<T> success(ResponseCode responseCode) {
         return BaseResponse.<T>builder()
                 .success(true)
