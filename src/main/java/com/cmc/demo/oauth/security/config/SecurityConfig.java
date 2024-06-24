@@ -1,6 +1,13 @@
 package com.cmc.demo.oauth.security.config;
 
 import com.cmc.demo.oauth.security.filter.JwtTokenFilter;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,22 +15,26 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
-@EnableGlobalMethodSecurity(
-        prePostEnabled = true,
-        securedEnabled = true,
-        jsr250Enabled = true)
 @Configuration
-@Component
+@EnableWebSecurity
+@OpenAPIDefinition(info = @Info(title = "REST API", version = "1.0",
+        description = "REST API description...",
+        contact = @Contact(name = "Name Surname")),
+        security = {@SecurityRequirement(name = "bearerToken")}
+)
+@SecuritySchemes({
+        @SecurityScheme(name = "bearerToken", type = SecuritySchemeType.HTTP,
+                scheme = "bearer", bearerFormat = "JWT")
+})
 public class SecurityConfig {
 
     private final JwtTokenFilter jwtAuthenticationFilter;
@@ -63,7 +74,11 @@ public class SecurityConfig {
         //@formatter:off
         httpSecurity
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/v1/api/auth/**",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-resources/**",
+                        "/swagger-resources").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

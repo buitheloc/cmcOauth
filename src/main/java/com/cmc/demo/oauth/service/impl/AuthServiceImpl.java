@@ -11,6 +11,7 @@ import com.cmc.demo.oauth.security.dto.response.AuthenticationResponse;
 import com.cmc.demo.oauth.security.dto.response.RefreshTokenResponse;
 import com.cmc.demo.oauth.security.utils.JwtTokenProvider;
 import com.cmc.demo.oauth.service.AuthService;
+import com.cmc.demo.oauth.util.MD5;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthenticationResponse authenticateUser(AuthenticationRequest authenticationRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
-                        authenticationRequest.getPassword())
+                        MD5.convertPassword(authenticationRequest.getPassword()))
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

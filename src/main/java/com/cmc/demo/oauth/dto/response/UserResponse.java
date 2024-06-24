@@ -1,4 +1,4 @@
-package com.cmc.demo.oauth.security.dto.response;
+package com.cmc.demo.oauth.dto.response;
 
 import com.cmc.demo.oauth.model.entity.Role;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponse {
+    private String userId;
     private String userName;
     private String email;
     private String description;

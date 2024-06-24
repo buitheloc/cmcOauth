@@ -24,7 +24,7 @@ public class MyUserDetails implements UserDetails {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 
         for (String permission : permissionList) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + permission));
+            authorities.add(new SimpleGrantedAuthority(permission));
         }
 
         return authorities;
